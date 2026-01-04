@@ -6,6 +6,9 @@ import { DroneModule } from './drone/drone.module';
 import { MedicationModule } from './medication/medication.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
+import { TokenModule } from './token/token.module';
+import { JwtModule } from './common/modules/jwt/jwt.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -13,7 +16,10 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule, 
     DroneModule, 
     MedicationModule, 
-    PrismaModule
+    PrismaModule, 
+    TokenModule,
+    JwtModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [AppService],

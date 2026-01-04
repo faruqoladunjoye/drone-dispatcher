@@ -2,7 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
 import compression from 'compression';
 import { AppModule } from './app.module';
+import { AppException } from './common/exception/app.exception';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -38,6 +40,9 @@ async function bootstrap() {
       stopAtFirstError: true,
     }),
   );
+
+  app.useGlobalInterceptors(new ResponseInterceptor());
+  app.useGlobalFilters(new AppException());
 
   await app.listen(process.env.PORT ?? 3000);
 }
