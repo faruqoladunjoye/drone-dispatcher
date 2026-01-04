@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserType {
+  ADMIN      @map("admin")
+  DISPATCHER @map("dispatcher")
+}
+
+enum TokenType {
+  ACCESS          @map("access")
+  REFRESH         @map("refresh")
+  FORGOT_PASSWORD @map("forgot_password")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  firstName String?
+  lastName  String?
+  email     String   @unique
+  password  String?
+  userType  UserType @default(DISPATCHER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  token     Token[]
+}
+
+model Token {
+  id        String    @id @default(uuid())
+  token     String    @unique @db.VarChar(300)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  type      TokenType @default(ACCESS)
+  expiresAt DateTime
+}
+
+enum DroneModel {
+  LIGHTWEIGHT   @map("lightweight")
+  MIDDLEWEIGHT  @map("middleweight")
+  CRUISERWEIGHT @map("cruiserweight")
+  HEAVYWEIGHT   @map("heavyweight")
+}
+
+enum DroneState {
+  IDLE       @map("idle")
+  LOADING    @map("loading")
+  LOADED     @map("loaded")
+  DELIVERING @map("delivering")
+  DELIVERED  @map("delivered")
+  RETURNING  @map("returning")
+}
+
+model Drone {
+  id               String            @id @default(uuid())
+  serialNumber     String            @unique @db.VarChar(100)
+  model            DroneModel
+  weightLimit      Int
+  batteryCapacity  Int
+  state            DroneState        @default(IDLE)
+  medications      DroneMedication[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  batteryAuditLogs BatteryAuditLog[]
+}
+
+model Medication {
+  id        String            @id @default(uuid())
+  name      String
+  weight    Int
+  code      String            @unique
+  image     String
+  drones    DroneMedication[]
+  createdAt DateTime          @default(now())
+}
+
+model DroneMedication {
+  id           String     @id @default(uuid())
+  droneId      String
+  medicationId String
+  quantity     Int        @default(1)
+  drone        Drone      @relation(fields: [droneId], references: [id])
+  medication   Medication @relation(fields: [medicationId], references: [id])
+  createdAt    DateTime   @default(now())
+
+  @@unique([droneId, medicationId])
+}
+
+model BatteryAuditLog {
+  id           String   @id @default(uuid())
+  droneId      String
+  batteryLevel Int
+  createdAt    DateTime @default(now())
+  drone        Drone    @relation(fields: [droneId], references: [id])
+}
