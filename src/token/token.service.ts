@@ -18,7 +18,6 @@ export class TokenService {
         private prismaService: PrismaService,
         private configService: ConfigService,
         private jwtService: JwtService,
-        private userService: UserService,
     ) {}
 
     private async convertDaysToISO(days) {

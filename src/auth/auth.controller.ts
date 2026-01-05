@@ -1,8 +1,6 @@
-import { Body, Controller, Post, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, SignupDto, ForgotPassword, ResetPassword,ChangePasswordDto } from './dto/auth.dto';
-import { User } from '@prisma/client';
-import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { LoginDto, SignupDto } from './dto/auth.dto';
 
 
 @Controller('auth')

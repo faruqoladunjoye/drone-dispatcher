@@ -1,9 +1,9 @@
 import { Injectable, Logger, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../user/user.service';
-import { LoginDto, SignupDto, ForgotPassword } from './dto/auth.dto';
+import { LoginDto, SignupDto } from './dto/auth.dto';
 import { isPasswordMatch } from '../common/utils/compare-password';
-import { TokenType, UserType } from '@prisma/client';
+import { UserType } from '@prisma/client';
 import { TokenService } from '../token/token.service';
 import * as bcryptjs from 'bcryptjs';
 import { exclude } from '../common/utils/exclude-field';
