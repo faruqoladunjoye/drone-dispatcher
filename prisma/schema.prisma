@@ -14,15 +14,14 @@ enum UserType {
 enum TokenType {
   ACCESS
   REFRESH
-  FORGOT_PASSWORD
 }
 
 model User {
   id        String   @id @default(uuid())
-  firstName String?
-  lastName  String?
+  firstName String
+  lastName  String
   email     String   @unique
-  password  String?
+  password  String
   userType  UserType @default(DISPATCHER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -36,6 +35,7 @@ model Token {
   user      User      @relation(fields: [userId], references: [id])
   type      TokenType @default(ACCESS)
   expiresAt DateTime
+  blackList Boolean   @default(false)
 }
 
 enum DroneModel {
